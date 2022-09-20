@@ -1,8 +1,14 @@
 <template>
-  <div class="text-red-800 text-6xl ">
     <router-view></router-view>
-  </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+import useFirebase from './composables/useFirebase';
+
+export default {
+  setup() {
+    const { app } = useFirebase()
+    console.log(app)
+  },
+}
 </script>
