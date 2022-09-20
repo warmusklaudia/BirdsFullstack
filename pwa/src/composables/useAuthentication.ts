@@ -5,7 +5,7 @@ import {
   User,
   UserCredential,
 } from 'firebase/auth'
-import { Ref, ref, resolveTransitionHooks } from 'vue'
+import { Ref, ref } from 'vue'
 import useFirebase from './useFirebase'
 
 const user: Ref<User | null> = ref(null)
