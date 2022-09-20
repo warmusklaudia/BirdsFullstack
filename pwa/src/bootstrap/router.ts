@@ -6,6 +6,16 @@ const routes: RouteRecordRaw[] = [
     name: 'Home',
     component: () => import('../screens/Home.vue'),
   },
+  {
+    path: '/birds',
+    name: 'Birds',
+    component: () => import('../screens/Birds.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'ClientError',
+    component: () => import('../screens/generic/ClientError.vue'),
+  },
 ]
 
 const router: Router = createRouter({
