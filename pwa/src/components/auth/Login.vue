@@ -21,6 +21,10 @@
                     <span class="mb-2 block">Password</span>
                     <input v-model="userInput.password"  id="password" class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring" type="password" name="password" autocomplete="current-password">
                 </label>
+
+                <p class="mt-3 text-sm">
+                <RouterLink to="/auth/forgot-password" class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring">Forgot password?</RouterLink>
+            </p>
             </div>
             <button class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-300 hover:bg-neutral-900 focus-visible:ring" :disabled="loading">
                 <span v-if="!loading" class="">Login</span>
@@ -41,6 +45,7 @@ import { defineComponent, reactive, Ref, ref } from 'vue';
 import { X, Loader2 } from 'lucide-vue-next'
 import useAuthentication from '../../composables/useAuthentication'
 import { setUserLogHandler } from '@firebase/logger';
+import { useRouter } from 'vue-router';
 export default defineComponent({
     components: {
         X,
@@ -49,6 +54,8 @@ export default defineComponent({
 
     setup() {
         const { login } = useAuthentication()
+        const { replace } = useRouter()
+
         const errorMessage: Ref<string> = ref('')
         const loading: Ref<boolean> = ref(false)
         const userInput = reactive ({
@@ -64,7 +71,7 @@ export default defineComponent({
             }
 
             login( userInput.email, userInput.password).then((u) => {
-                console.log('Login successful: ', u)
+                return replace ('/')
             }).catch((error) => {
                 errorMessage.value = error.message
             }).finally(() => {

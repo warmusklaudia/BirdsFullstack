@@ -1,5 +1,7 @@
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateProfile,
   User,
@@ -58,6 +60,19 @@ export default () => {
 
   // TODO: restore Auth
 
+  const restoreUser = (): Promise<Ref<User | null>> => {
+    return new Promise((resolve, reject) => {
+      auth.onAuthStateChanged((u: User | null) => {
+        if (u) {
+          setUser(u)
+          resolve(user)
+        } else {
+          resolve(ref(null))
+        }
+      })
+    })
+  }
+
   // TODO: logout
 
   const logout = (): Promise<void> => {
@@ -76,16 +91,16 @@ export default () => {
 
   // TODO: forgot password
 
-  const restoreUser = (): Promise<Ref<User | null>> => {
+  const forgotPass = (email: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-      auth.onAuthStateChanged((u: User | null) => {
-        if (u) {
-          setUser(u)
-          resolve(user)
-        } else {
-          resolve(ref(null))
-        }
-      })
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          console.log('pass email sent')
+          resolve()
+        })
+        .catch((error) => {
+          reject(error)
+        })
     })
   }
 
@@ -99,5 +114,6 @@ export default () => {
     login,
     logout,
     restoreUser,
+    forgotPass,
   }
 }
