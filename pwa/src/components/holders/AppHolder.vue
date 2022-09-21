@@ -1,38 +1,22 @@
 <template>
-        <header>
-        <nav class="my-6 mx-10">
-            <div class="flex justify-between items-center">
-                <img src="/safari-pinned-tab.svg" class="w-12 pr-2 md:w-18" alt="">
-                <div class="flex gap-4 md:gap-8">
-                    <RouterLink to="/" class=" md:text-lg lg:text-2xl font-medium">Home</RouterLink>
-                    <RouterLink to="/birds" class=" md:text-lg lg:text-2xl font-medium">Vogels</RouterLink>
-                    <RouterLink to="/log" class=" md:text-lg lg:text-2xl font-medium">Logboek</RouterLink>
-                    <RouterLink to="/observations" class=" md:text-lg lg:text-2xl font-medium">Observaties</RouterLink> 
-                    <RouterLink to="/locations" class=" md:text-lg lg:text-2xl font-medium">Locaties</RouterLink> 
-                    <RouterLink to="/account" class="md:text-lg lg:text-2xl font-medium first-letter:uppercase">{{user?.displayName}}</RouterLink>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <router-view class="min-h-screen"></router-view>
-    <AppFooter />
+    <div class="grid h-screen min-h-screen grid-rows-[auto_1fr_auto] sm:h-auto">
+        <AppHeader />
+        <router-view class="min-h-screen"></router-view>
+        <AppFooter />
+    </div>
+
 </template>
 
 <script lang="ts">
 import useAuthentication from '../../composables/useAuthentication';
 import AppFooter from '../generic/AppFooter.vue'
+import AppHeader from '../generic/AppHeader.vue';
 
 
     export default {                
         components: {
                 AppFooter,
+                AppHeader,
                 },
-        setup() {
-            const { user } = useAuthentication()
-            return {
-                user
-            }
-        }
-
     }
 </script>
