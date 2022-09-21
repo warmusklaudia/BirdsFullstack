@@ -2,14 +2,14 @@
         <header>
         <nav class="my-6 mx-10">
             <div class="flex justify-between items-center">
-                <img src="/safari-pinned-tab.svg" class="w-18" alt="">
-                <div class="flex gap-8">
-                    <RouterLink to="/" class="invisible md:visible md:text-lg lg:text-2xl font-medium">Home</RouterLink>
-                    <RouterLink to="/birds" class="invisible md:visible md:text-lg lg:text-2xl font-medium">Vogels</RouterLink>
-                    <RouterLink to="/log" class="invisible md:visible md:text-lg lg:text-2xl font-medium">Logboek</RouterLink>
-                    <RouterLink to="/observations" class="invisible md:visible md:text-lg lg:text-2xl font-medium">Observaties</RouterLink> 
-                    <RouterLink to="/locations" class="invisible md:visible md:text-lg lg:text-2xl font-medium">Locaties</RouterLink> 
-                    <RouterLink to="/account" class="invisible md:visible md:text-lg lg:text-2xl font-medium first-letter:uppercase">{{user?.displayName}}</RouterLink>
+                <img src="/safari-pinned-tab.svg" class="w-12 pr-2 md:w-18" alt="">
+                <div class="flex gap-4 md:gap-8">
+                    <RouterLink to="/" class=" md:text-lg lg:text-2xl font-medium">Home</RouterLink>
+                    <RouterLink to="/birds" class=" md:text-lg lg:text-2xl font-medium">Vogels</RouterLink>
+                    <RouterLink to="/log" class=" md:text-lg lg:text-2xl font-medium">Logboek</RouterLink>
+                    <RouterLink to="/observations" class=" md:text-lg lg:text-2xl font-medium">Observaties</RouterLink> 
+                    <RouterLink to="/locations" class=" md:text-lg lg:text-2xl font-medium">Locaties</RouterLink> 
+                    <RouterLink to="/account" class="md:text-lg lg:text-2xl font-medium first-letter:uppercase">{{user?.displayName}}</RouterLink>
                 </div>
             </div>
         </nav>
