@@ -15,15 +15,7 @@
         to="/birds"
         active-class="text-neutral-400"
         class="inline-block rounded-md font-medium outline-none focus-visible:ring-2 md:text-lg lg:text-2xl"
-        ><Feather class="mx-auto mb-2 h-6 sm:hidden" />Vogels</router-link
-      >
-    </li>
-    <li>
-      <router-link
-        to="/log"
-        active-class="text-neutral-400"
-        class="inline-block rounded-md font-medium outline-none focus-visible:ring-2 md:text-lg lg:text-2xl"
-        ><Clipboard class="mx-auto mb-2 h-6 sm:hidden" />Logboek</router-link
+        ><Feather class="mx-auto mb-2 h-6 sm:hidden" />Birds</router-link
       >
     </li>
     <li>
@@ -31,7 +23,15 @@
         to="/observations"
         active-class="text-neutral-400"
         class="inline-block rounded-md font-medium outline-none focus-visible:ring-2 md:text-lg lg:text-2xl"
-        ><Scroll class="mx-auto mb-2 h-6 sm:hidden" />Observaties</router-link
+        ><Scroll class="mx-auto mb-2 h-6 sm:hidden" />Observations</router-link
+      >
+    </li>
+    <li>
+      <router-link
+        to="/account"
+        active-class="text-neutral-400"
+        class="inline-block rounded-md font-medium outline-none focus-visible:ring-2 sm:hidden md:text-lg lg:text-2xl"
+        ><User class="mx-auto mb-2 h-6 sm:hidden" />User</router-link
       >
     </li>
     <li class="hidden pl-6 sm:block">
@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import useAuthentication from '../../composables/useAuthentication'
-import { Home, Feather, Scroll, Clipboard } from 'lucide-vue-next'
+import { Home, Feather, Scroll, Clipboard, User } from 'lucide-vue-next'
 
 export default {
   components: {
@@ -63,6 +63,7 @@ export default {
     Feather,
     Scroll,
     Clipboard,
+    User,
   },
   setup() {
     const { user } = useAuthentication()
