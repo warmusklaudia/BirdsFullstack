@@ -29,7 +29,6 @@ export class BirdsService {
   }
 
   findOne(id: string): Promise<Bird> {
-    //@ts-ignore
     return this.birdsRepository.findOne(new ObjectId(id))
   }
 

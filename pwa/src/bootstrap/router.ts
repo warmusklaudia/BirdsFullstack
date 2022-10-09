@@ -24,6 +24,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../screens/birds/index.vue'),
       },
       {
+        path: 'birds/:id',
+        component: () => import('../screens/birds/_id.vue'),
+      },
+      {
         path: 'observations',
         component: () => import('../screens/observations/index.vue'),
         meta: {

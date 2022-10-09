@@ -13,14 +13,12 @@ export class ObservationsService {
     private readonly observationRepository: Repository<Observation>,
   ) {}
   create(createObservationInput: CreateObservationInput): Promise<Observation> {
-    // return 'This action adds a new observation'
     const o = new Observation()
     o.name = createObservationInput.name
     o.description = createObservationInput.description
     o.weather = createObservationInput.weather
-    // o.birds = createObservationInput.bird
+    o.userId = createObservationInput.userId
     o.birdId = createObservationInput.birdId
-    // o.location = createObservationInput.location
     o.locationId = createObservationInput.locationId
     o.active = createObservationInput.active
     return this.observationRepository.save(o)

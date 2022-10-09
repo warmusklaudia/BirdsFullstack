@@ -1,8 +1,11 @@
 <template>
-  <div class="px-6">
+  <div class="px-6 py-6">
     <main class="mx-auto max-w-6xl">
-      <h1 v-if="title" class="font-theme text-3xl font-bold">{{ title }}</h1>
-      <slot></slot>
+      <div class="flex items-center justify-between">
+        <h1 v-if="title" class="font-theme text-3xl font-bold">{{ title }}</h1>
+        <slot name="header-actions"></slot>
+      </div>
+      <slot name="default"></slot>
     </main>
   </div>
 </template>

@@ -5,6 +5,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const port: number = +process.env.PORT || 3003
   await app.listen(port)
-  console.info(`\nWelcome to the server. Visit http://localhost:${port}/graphql`)
+  console.info(`\nWelcome to the server. Visit ${await app.getUrl()}/graphql`)
 }
 bootstrap()
