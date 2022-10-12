@@ -47,10 +47,13 @@ export default {
       id: params.id,
     })
 
-    const birdName: Ref<string> = ref(result.value?.bird.name || '...')
+    const birdName: Ref<string> = ref(
+      //@ts-ignore
+      result && result.bird ? result.bird.name : '...',
+    )
 
-    watch(result, () => {
-      birdName.value = result.value.bird.name
+    watch(result, (result) => {
+      if (result) birdName.value = result.bird.name
     })
 
     return {

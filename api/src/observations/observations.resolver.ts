@@ -7,7 +7,10 @@ import { BirdsService } from '../birds/birds.service'
 import { LocationsService } from '../locations/locations.service'
 import { Bird } from '../birds/entities/bird.entity'
 import { Location } from '../locations/entities/location.entity'
-import { ClientMessage, MessageTypes } from '../entities/ClientMessage'
+import { ClientMessage, MessageTypes } from '../bootstrap/entitties/ClientMessage'
+import { FirebaseGuard } from 'src/auth/guard/firebase.guard'
+import { UseGuards } from '@nestjs/common'
+import { CurrentUser } from 'src/auth/decorators/user.decorator'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
@@ -36,8 +39,10 @@ export class ObservationsResolver {
     return this.observationsService.create(createObservationInput)
   }
 
+  @UseGuards(FirebaseGuard)
   @Query(() => [Observation], { name: 'observations' })
-  findAll() {
+  findAll(@CurrentUser() user) {
+    console.log(user)
     return this.observationsService.findAll()
   }
 

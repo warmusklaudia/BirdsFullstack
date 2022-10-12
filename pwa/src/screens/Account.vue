@@ -1,5 +1,5 @@
 <template>
-  <route-holder :title="`Hi, ${user.displayName}`"></route-holder>
+  <route-holder :title="`Hi, ${user?.displayName}`"></route-holder>
   <button @click="handleLogout">Log out</button>
 </template>
 
@@ -15,6 +15,12 @@ export default {
   setup() {
     const { replace } = useRouter()
     const { user, logout } = useAuthentication()
+
+    const getToken = async () => {
+      console.log(await user.value?.getIdToken())
+    }
+
+    getToken()
 
     const handleLogout = () => {
       logout().then(() => {

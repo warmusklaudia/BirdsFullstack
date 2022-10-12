@@ -46,6 +46,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../screens/locations/index.vue'),
       },
       {
+        path: 'locations/add',
+        component: () => import('../screens/locations/Add.vue'),
+      },
+      {
         path: 'log',
         component: () => import('../screens/log/index.vue'),
         meta: {

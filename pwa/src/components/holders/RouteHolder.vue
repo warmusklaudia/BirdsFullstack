@@ -20,13 +20,13 @@ interface CustomPropType {
 export default {
   props: {
     title: {
-      type: String,
+      type: String as () => string,
       required: false,
     },
   },
 
-  setup(props: CustomPropType) {
-    return { title: props.title }
+  setup() {
+    return {}
   },
 }
 </script>

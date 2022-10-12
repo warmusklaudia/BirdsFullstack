@@ -1,32 +1,26 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql'
-import { ObjectId } from 'mongodb'
+import { ObjectType, Field, Int, ID } from '@nestjs/graphql'
 import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } from 'typeorm'
+import { ObjectId } from 'mongodb'
 import { Observation } from 'src/observations/entities/observation.entity'
-import { Polygon } from 'geojson'
-import { Area } from './area.entity'
 
-@Entity()
-@ObjectType({ description: 'location' })
-export class Location {
+Entity()
+@ObjectType()
+export class User {
   @Field(() => ID)
   @ObjectIdColumn()
   id: ObjectId
 
   @Field()
   @Column()
-  name: string
+  uid: string
 
-  // @Field()
-  // @Column()
-  // observationsId: string
-
-  @Field(() => [Observation], { nullable: 'itemsAndList' })
+  @Field(() => [Observation], { nullable: 'itemsAndList' }) // can return []
   @Column({ nullable: true })
   observations: Observation[]
 
-  @Field(() => Area)
-  @Column({ nullable: true, type: 'simple-json' })
-  area: Polygon
+  @Field(() => Int)
+  @Column()
+  observationsCount: number
 
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })

@@ -57,17 +57,24 @@
           <select
             :disabled="loading"
             v-if="result"
-            v-model="observationInput.locationId"
+            v-model="observationInput.location"
             name="locationId"
             id="locationId"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            @change="setPolygon"
           >
             <option value="Pick a location" selected disabled>Pick a location</option>
-            <option v-for="l of result.locations" :key="l.id" :value="l.id">
+            <option v-for="l of result.locations" :key="l.id" :value="l">
               {{ l.name }}
             </option>
           </select>
         </label>
+
+        <map-view
+          :mapCoordinates="{ lng: 3.3232699, lat: 50.8425729 }"
+          :polygons="polygons"
+          class="min-h-[10vh]"
+        />
       </div>
 
       <!-- DESCRIPTION -->
@@ -114,26 +121,34 @@
 </template>
 
 <script lang="ts">
-import { useMutation, useQuery } from '@vue/apollo-composable'
+import { reactive, ref, Ref, watch } from 'vue'
 import gql from 'graphql-tag'
-import { reactive, ref, Ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useQuery, useMutation } from '@vue/apollo-composable'
+import { Loader2, X } from 'lucide-vue-next'
 import RouteHolder from '../../components/holders/RouteHolder.vue'
+import MapView from '../../components/generic/MapView.vue'
 import useAuthentication from '../../composables/useAuthentication'
-import { X, Loader2 } from 'lucide-vue-next'
+import { Polygon } from 'geojson'
+import Location from '../../interfaces/interface.location'
 export default {
   components: {
     RouteHolder,
-    X,
+    MapView,
     Loader2,
+    X,
   },
-
   setup() {
     const { user } = useAuthentication()
-
+    const { replace } = useRouter()
     const errorMessage: Ref<string> = ref('')
-
+    const polygons: Ref<Polygon[]> = ref([])
+    // TODO: make form
+    // Link input values (v-model)
+    // Add styling!
+    // TODO: validation...
     const INSERT_DATA = gql`
-      query birds {
+      query insertData {
         birds {
           id
           name
@@ -141,10 +156,13 @@ export default {
         locations {
           id
           name
+          area {
+            type
+            coordinates
+          }
         }
       }
     `
-
     const ADD_OBSERVATION = gql`
       mutation createObservation($createObservationInput: CreateObservationInput!) {
         createObservation(createObservationInput: $createObservationInput) {
@@ -154,34 +172,52 @@ export default {
       }
     `
     const observationInput = reactive({
-      name: 'Bird',
-      birdId: 'Pick a bird specie',
+      name: 'Beautiful bird',
+      description: 'A beautiful common buzzard (buteo buteo) flying over Kortrijk.',
+      weather: 'Overcast, clouded',
+      birdId: 'Buizerd',
+      location: {} as Partial<Location>,
       locationId: '',
-      description: 'Beautiful bird',
-      weather: 'Clouded',
-      userId: user.value?.uid,
+      geolocation: { lng: 3.3232699, lat: 50.8425729 },
+      userId: user.value!.uid,
+      active: true,
     })
-
     const { result, loading, error } = useQuery(INSERT_DATA)
     const { mutate: addObservation } = useMutation(ADD_OBSERVATION, () => ({
+      // Callback function for reactive data & variable name without $...
       variables: {
         createObservationInput: observationInput,
       },
     }))
-
+    const setPolygon = () => {
+      if (!observationInput.location) return
+      console.log(observationInput.location.area)
+      // @ts-ignore
+      polygons.value = [observationInput.location.area]
+    }
+    // watch(result, (newResult) => {
+    //   if (newResult) {
+    //     polygons.value = newResult.locations.map((l: Location) => l.area)
+    //     // TODO:
+    //     // calculate center of all polygons combined
+    //   }
+    // })
     const submitForm = async () => {
+      observationInput.locationId = observationInput.location.id!
       const observation = await addObservation().catch((err) => {
+        console.log({ err })
         errorMessage.value = err.message
       })
       console.log(observation)
     }
-
     return {
       observationInput,
       result,
       loading,
       error,
       errorMessage,
+      polygons,
+      setPolygon,
       submitForm,
     }
   },

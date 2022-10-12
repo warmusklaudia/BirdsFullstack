@@ -8,6 +8,9 @@ import { BirdsModule } from './birds/birds.module'
 import { ObservationsModule } from './observations/observations.module'
 import { LocationsModule } from './locations/locations.module'
 import { DatabaseSeedModule } from './seed/seed.module'
+import { AuthModule } from './auth/auth.module'
+import { FirebaseService } from './auth/firebase/firebase.service'
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,6 +20,8 @@ import { DatabaseSeedModule } from './seed/seed.module'
     ObservationsModule,
     LocationsModule,
     DatabaseSeedModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
