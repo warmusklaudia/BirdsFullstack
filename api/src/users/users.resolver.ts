@@ -4,6 +4,7 @@ import { User } from './entities/user.entity'
 import { CreateUserInput } from './dto/create-user.input'
 import { UpdateUserInput } from './dto/update-user.input'
 import { ClientMessage, MessageTypes } from 'src/bootstrap/entitties/ClientMessage'
+import { ObjectId } from 'mongodb'
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -20,8 +21,13 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: string) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.usersService.findOne(id)
+  }
+
+  @Query(() => User, { name: 'user' })
+  findByUid(@Args('uid', { type: () => String }) uid: string) {
+    return this.usersService.findByUid(uid)
   }
 
   @Mutation(() => User)
@@ -30,7 +36,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: string) {
+  removeUser(@Args('id', { type: () => String }) id: string) {
     return new Promise((resolve) => {
       this.usersService
         .remove(id)
