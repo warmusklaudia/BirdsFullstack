@@ -1,6 +1,6 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 import useAuthentication from './useAuthentication'
 import { setContext } from '@apollo/client/link/context'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 
 export default () => {
   const { user } = useAuthentication()

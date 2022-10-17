@@ -3,7 +3,7 @@ import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } fr
 import { ObjectId } from 'mongodb'
 import { Observation } from 'src/observations/entities/observation.entity'
 
-Entity()
+@Entity()
 @ObjectType()
 export class User {
   @Field(() => ID)

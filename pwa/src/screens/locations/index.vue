@@ -16,10 +16,8 @@
 </template>
 
 <script lang="ts">
-import gql from 'graphql-tag'
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import MapView from '../../components/generic/MapView.vue'
-import { useQuery } from '@vue/apollo-composable'
 import { LngLatLike } from 'mapbox-gl'
 
 export default {
