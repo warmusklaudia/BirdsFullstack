@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-http-bearer'
 import { auth, FirebaseError } from 'firebase-admin'
 import * as firebaseAdmin from 'firebase-admin'
+
 import { FirebaseService } from './firebase/firebase.service'
 
 type DecodedIdToken = firebaseAdmin.auth.DecodedIdToken
