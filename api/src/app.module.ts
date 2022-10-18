@@ -1,4 +1,4 @@
-import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo'
+import { ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -8,6 +8,10 @@ import { BirdsModule } from './birds/birds.module'
 import { ObservationsModule } from './observations/observations.module'
 import { LocationsModule } from './locations/locations.module'
 import { DatabaseSeedModule } from './seed/seed.module'
+import { AuthModule } from './auth/auth.module'
+import { UsersModule } from './users/users.module'
+import { LivelocationsModule } from './livelocations/livelocations.module'
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -17,6 +21,10 @@ import { DatabaseSeedModule } from './seed/seed.module'
     ObservationsModule,
     LocationsModule,
     DatabaseSeedModule,
+    AuthModule,
+    UsersModule,
+    LivelocationsModule,
+    NotificationsModule,
   ],
   controllers: [],
   providers: [],

@@ -5,7 +5,7 @@ import { CreateBirdInput } from './dto/create-bird.input'
 import { Bird } from './entities/bird.entity'
 import { CreateBird, CreateBirdInputStub } from './stubs/bird.stub'
 import { ObjectId } from 'mongodb'
-import { ClientMessage, MessageTypes } from '../entities/ClientMessage'
+import { ClientMessage, MessageTypes } from '../bootstrap/entitties/ClientMessage'
 
 describe('BirdsResolver', () => {
   let resolver: BirdsResolver

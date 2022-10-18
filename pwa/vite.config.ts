@@ -13,6 +13,7 @@ export default defineConfig({
     Unocss({
       rules: [['font-theme', { 'font-family': 'din-condensed, sans-serif' }]],
     }),
+
     VitePluginFonts({
       typekit: {
         id: 'tyl3zcq',

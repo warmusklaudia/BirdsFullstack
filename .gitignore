@@ -1,3 +1,5 @@
 **/node_modules/
 pwa/.env
 **/dist/
+api/labofullstack-firebase-adminsdk-eullu-cf558a2072.json
+api/.env

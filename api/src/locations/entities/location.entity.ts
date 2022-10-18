@@ -1,7 +1,10 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql'
 import { ObjectId } from 'mongodb'
 import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } from 'typeorm'
+import { Polygon } from 'geojson'
+
 import { Observation } from 'src/observations/entities/observation.entity'
+import { Area } from './area.entity'
 
 @Entity()
 @ObjectType({ description: 'location' })
@@ -14,17 +17,13 @@ export class Location {
   @Column()
   name: string
 
-  // @Field()
-  // @Column()
-  // observationsId: string
-
   @Field(() => [Observation], { nullable: 'itemsAndList' })
   @Column({ nullable: true })
   observations: Observation[]
 
-  @Field()
-  @Column()
-  location: string
+  @Field(() => Area)
+  @Column({ nullable: true, type: 'simple-json' })
+  area: Polygon
 
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })

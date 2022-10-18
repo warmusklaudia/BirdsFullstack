@@ -7,7 +7,11 @@ import { BirdsService } from '../birds/birds.service'
 import { LocationsService } from '../locations/locations.service'
 import { Bird } from '../birds/entities/bird.entity'
 import { Location } from '../locations/entities/location.entity'
-import { ClientMessage, MessageTypes } from '../entities/ClientMessage'
+import { ClientMessage, MessageTypes } from '../bootstrap/entitties/ClientMessage'
+import { FirebaseGuard } from 'src/auth/guard/firebase.guard'
+import { UseGuards } from '@nestjs/common'
+import { CurrentUser } from 'src/auth/decorators/user.decorator'
+import { NotificationsGateway } from 'src/notifications/notifications.gateway'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
@@ -15,6 +19,7 @@ export class ObservationsResolver {
     private readonly observationsService: ObservationsService,
     private readonly birdService: BirdsService,
     private readonly locationService: LocationsService,
+    private readonly notificationsGateway: NotificationsGateway,
   ) {}
 
   @ResolveField()
@@ -29,15 +34,23 @@ export class ObservationsResolver {
   }
 
   @Mutation(() => Observation)
-  createObservation(
+  async createObservation(
     @Args('createObservationInput')
     createObservationInput: CreateObservationInput,
   ) {
-    return this.observationsService.create(createObservationInput)
+    const obs = await this.observationsService.create(createObservationInput)
+    const locat = await this.locationService.findLocationByPoint(obs.geolocation)
+    if (locat.length > 0) {
+      //verwittig iedereen in deze room
+      this.notificationsGateway.server.to(locat[0].name).emit('bird:observation', obs)
+    }
+    return obs
   }
 
+  @UseGuards(FirebaseGuard)
   @Query(() => [Observation], { name: 'observations' })
-  findAll() {
+  findAll(@CurrentUser() user) {
+    console.log(user)
     return this.observationsService.findAll()
   }
 

@@ -19,6 +19,7 @@ export class ObservationsService {
     o.weather = createObservationInput.weather
     o.userId = createObservationInput.userId
     o.birdId = createObservationInput.birdId
+    o.geolocation = createObservationInput.geoPoint
     o.locationId = createObservationInput.locationId
     o.active = createObservationInput.active
     return this.observationRepository.save(o)
@@ -42,6 +43,7 @@ export class ObservationsService {
     update.birdId = updateObservationInput.birdId
     // update.location = updateObservationInput.location
     update.locationId = updateObservationInput.locationId
+    update.geolocation = updateObservationInput.geoPoint
     update.active = updateObservationInput.active
     return this.observationRepository.save(update)
   }
