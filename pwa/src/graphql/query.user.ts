@@ -1,15 +1,26 @@
-import { gql } from '@apollo/client/core'
+import gql from 'graphql-tag'
+
 export const GET_USER_BY_UID = gql`
-  query GetUserByUid($uid: String!) {
-    user(uid: $uid) {
+  query findByUid($uid: String!) {
+    findByUid(uid: $uid) {
       id
       uid
       observations {
         id
-        title
-        description
-        createdAt
+        name
+        location {
+          id
+          name
+        }
+        bird {
+          id
+          name
+          fullname
+          category
+        }
+        userId
         updatedAt
+        createdAt
       }
       observationsCount
       createdAt

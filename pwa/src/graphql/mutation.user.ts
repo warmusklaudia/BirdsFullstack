@@ -1,13 +1,13 @@
-import { gql } from '@apollo/client/core'
+import gql from 'graphql-tag'
 
-export const createUser = gql`
+export const CREATE_USER = gql`
   mutation CreateUser($uid: String!) {
     createUser(createUserInput: { uid: $uid }) {
       id
       uid
       observations {
         id
-        name
+        title
         description
         createdAt
         updatedAt
