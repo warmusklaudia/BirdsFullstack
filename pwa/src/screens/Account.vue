@@ -1,5 +1,5 @@
 <template>
-  <route-holder :title="`Hi, ${user?.displayName}`">
+  <route-holder :title="`${$t('account.welcome')} ${user?.displayName}`">
     <template #header-actions>
       <button
         class="@dark:bg-neutral-50 @dark:text-neutral-800 rounded-md bg-neutral-800 px-4 py-2 text-white"
@@ -20,6 +20,14 @@
           <label for="server"> Connect to server </label>
         </div>
       </div>
+      <div>
+        <h2 class="font-theme mb-3 text-2xl font-medium tracking-wide">Language</h2>
+        <label for="language">
+          <select name="language" id="language" @change="setLocale">
+            <option v-for="locale of AVAILABLE_LOCALES" :value="locale">{{ locale }}</option>
+          </select>
+        </label>
+      </div>
     </div>
     <div v-if="customUser">
       <h2 class="font-theme mb-3 text-2xl font-medium tracking-wide">Recent observations</h2>
@@ -34,7 +42,8 @@ import { useRouter } from 'vue-router'
 import useCustomUser from '../composables/useCustomUser'
 import ObservationsTable from '../components/observation/ObservationsTable.vue'
 import useSocket from '../composables/useSocket'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import useI18n from '../composables/useI18n'
 export default {
   components: {
     RouteHolder,
@@ -44,6 +53,7 @@ export default {
     const { user, logout } = useAuthentication()
     const { customUser } = useCustomUser()
     const { replace } = useRouter()
+    const { AVAILABLE_LOCALES, loadLocale, t } = useI18n()
     const { connectToServer, disconnectFromServer, connected } = useSocket()
     const connectedToServer = ref<boolean>(connected.value)
     const handleLogOut = () => {
@@ -53,6 +63,11 @@ export default {
     }
     const getToken = async () => {
       console.log(await user.value?.getIdToken())
+    }
+    const title = computed(() => t('account.welcome', { user: user.value?.displayName }))
+    const setLocale = (event: Event) => {
+      const target = event.target as HTMLSelectElement
+      loadLocale(target.value)
     }
     getToken()
     watch(connectedToServer, () => {
@@ -65,10 +80,13 @@ export default {
     console.log('Connecting')
     connectToServer()
     return {
+      AVAILABLE_LOCALES,
       user,
       customUser,
       connectedToServer,
+      title,
       handleLogOut,
+      setLocale,
     }
   },
 }
