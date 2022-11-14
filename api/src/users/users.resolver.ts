@@ -5,6 +5,9 @@ import { CreateUserInput } from './dto/create-user.input'
 import { UpdateUserInput } from './dto/update-user.input'
 import { ClientMessage, MessageTypes } from 'src/bootstrap/entitties/ClientMessage'
 import { ObjectId } from 'mongodb'
+import { UseGuards } from '@nestjs/common'
+import { FirebaseGuard } from 'src/auth/guard/firebase.guard'
+import { RolesGuard } from 'src/auth/guard/role.guard'
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -15,6 +18,7 @@ export class UsersResolver {
     return this.usersService.create(createUserInput)
   }
 
+  @UseGuards(FirebaseGuard, RolesGuard(['admin']))
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll()

@@ -30,19 +30,20 @@
       </div>
 
       <div class="mt-3">
-        <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="locationId">
+        <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="birdId">
           <span class="mb-2 block">Location</span>
+
           <span class="sr-only">A map view to select the location of the observed bird.</span>
           <map-view
             class="rounded-md"
-            :map-coordinates="{ lng: 3.3147737, lat: 50.8424814 }"
+            :map-coordinates="{ lng: 3.3232699, lat: 50.8425729 }"
             @coordinateSelection="locationInput.location = $event"
           />
         </label>
       </div>
 
       <button
-        class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-300 hover:bg-neutral-900 focus-visible:ring"
+        class="@dark:bg-neutral-50 @dark:text-neutral-800 mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-300 hover:bg-neutral-900 focus-visible:ring"
         :disabled="loading"
       >
         <span v-if="!loading">Add location</span>
@@ -55,73 +56,68 @@
 </template>
 
 <script lang="ts">
-import { useMutation, useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
 import { reactive, ref, Ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useMutation } from '@vue/apollo-composable'
+import { Loader2, X } from 'lucide-vue-next'
+
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import useAuthentication from '../../composables/useAuthentication'
-import { X, Loader2 } from 'lucide-vue-next'
 import MapView from '../../components/generic/MapView.vue'
+import { ADD_LOCATION } from '../../graphql/mutation.location'
+
 export default {
   components: {
     RouteHolder,
-    X,
     Loader2,
+    X,
     MapView,
   },
 
   setup() {
     const { user } = useAuthentication()
+    const { replace } = useRouter()
 
     const errorMessage: Ref<string> = ref('')
+    const loading: Ref<boolean> = ref(false)
 
-    const INSERT_DATA = gql`
-      query birds {
-        birds {
-          id
-          name
-        }
-        locations {
-          id
-          name
-        }
-      }
-    `
+    // TODO: make form
+    // Link input values (v-model)
+    // Add styling!
+    // TODO: validation...
 
-    const ADD_LOCATION = gql`
-      mutation createLocation($createLocationInput: CreateLocationInput!) {
-        createLocation(createLocationInput: $createLocationInput) {
-          id
-          name
-        }
-      }
-    `
     const locationInput = reactive({
-      name: 'Bird',
+      name: 'Uitkerkse Polder',
       location: null,
     })
 
-    const { result, loading, error } = useQuery(INSERT_DATA)
     const { mutate: addLocation } = useMutation(ADD_LOCATION, () => ({
+      // Callback function for reactive data & variable name without $...
       variables: {
         createLocationInput: locationInput,
       },
     }))
 
     const submitForm = async () => {
-      const location = await addLocation().catch((err) => {
-        errorMessage.value = err.message
-      })
+      loading.value = true
+      const location = await addLocation()
+        .catch((err) => {
+          console.log({ err })
+
+          errorMessage.value = err.message
+        })
+        .finally(() => {
+          loading.value = false
+        })
+
       console.log(location)
     }
 
     return {
       locationInput,
-      result,
-      loading,
-      error,
       errorMessage,
       submitForm,
+      loading,
     }
   },
 }

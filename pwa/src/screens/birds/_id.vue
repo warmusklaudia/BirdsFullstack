@@ -1,28 +1,51 @@
 <template>
   <route-holder :title="`${birdName}`">
-    <div v-if="loading"></div>
-    <div v-else-if="error"><p>Error happened</p></div>
-    <div class="grid grid-cols-[1fr_2fr] gap-12" v-else-if="result">
-      <img
-        class="aspect-square w-full"
-        :src="`./${result.bird.name}.webp`"
-        :alt="`Drawing of a ${result.bird.name}`"
-      />
-      <div class="max-w-lg">
-        <p class="mb-3 text-sm">{{ result.bird.category }}</p>
-        <p class="text-lg leading-relaxed">{{ result.bird.description }}</p>
+    <div v-if="loading">
+      <p>Loading</p>
+    </div>
+    <div v-else-if="error">
+      <p>Error happened.</p>
+    </div>
+    <div v-else-if="result">
+      <p class="mb-12 text-sm font-medium tracking-wider">
+        {{ result.bird.category }}
+      </p>
+      <div class="grid grid-cols-[1fr_2fr] items-center gap-12">
+        <img
+          class="aspect-square w-full"
+          :src="`/birds/${result.bird.name}.webp`"
+          :alt="`Drawing of a ${result.bird.name}`"
+        />
+
+        <div class="max-w-lg">
+          <p class="text-lg leading-relaxed">{{ result.bird.description }}</p>
+        </div>
+      </div>
+
+      <div
+        class="my-6 -ml-6 min-h-[30vh] w-[calc(100vw)] bg-neutral-100 p-6 lg:ml-[calc(calc(100vw-72rem)/-2)]"
+      >
+        <div class="mx-auto max-w-6xl">
+          <h2 class="font-theme text-2xl font-normal tracking-wide">Observations</h2>
+          <p>
+            This bird has been spotted
+            {{ result.bird.observations }} time{{ result.bird.observations === 1 ? '' : 's' }}.
+          </p>
+        </div>
       </div>
     </div>
   </route-holder>
 </template>
 
 <script lang="ts">
-import RouteHolder from '../../components/holders/RouteHolder.vue'
+import { ref, Ref, watch } from 'vue-demi'
 import { useRoute } from 'vue-router'
-import { ref, Ref, watch } from 'vue'
-import Bird from '../../interfaces/interface.bird'
-import gql from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
+
+import RouteHolder from '../../components/holders/RouteHolder.vue'
+import Bird from '../../interfaces/interface.bird'
+import { BIRD_BY_ID } from '../../graphql/query.bird'
+
 export default {
   components: {
     RouteHolder,
@@ -30,25 +53,14 @@ export default {
 
   setup() {
     const { params } = useRoute()
-    const bird: Ref<Partial<Bird> | null> = ref(null)
 
-    const BIRD_BY_ID = gql`
-      query bird($id: String!) {
-        bird(id: $id) {
-          id
-          name
-          url
-          description
-          category
-        }
-      }
-    `
-    const { result, loading, error } = useQuery(BIRD_BY_ID, {
+    const { result, loading, error } = useQuery<{ bird: Bird }>(BIRD_BY_ID, {
       id: params.id,
     })
 
     const birdName: Ref<string> = ref(
-      //@ts-ignore
+      // TODO: weird thing here...
+      // @ts-ignore
       result && result.bird ? result.bird.name : '...',
     )
 

@@ -156,13 +156,16 @@ import { useQuery, useMutation } from '@vue/apollo-composable'
 import { Loader2, X } from 'lucide-vue-next'
 import { Polygon } from 'geojson'
 import { LngLat } from 'mapbox-gl'
+
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import MapView from '../../components/generic/MapView.vue'
 import useAuthentication from '../../composables/useAuthentication'
 import Location from '../../interfaces/interface.location'
+
 import { ADD_OBSERVATION } from '../../graphql/mutation.observation'
 import { OBSERVATIONS, OBSERVATION_INSERT_DATA } from '../../graphql/query.observations'
 import Observation from '../../interfaces/interface.observation'
+
 export default {
   components: {
     RouteHolder,
@@ -170,18 +173,23 @@ export default {
     Loader2,
     X,
   },
+
   setup() {
     const { user } = useAuthentication()
     const { push } = useRouter()
+
     const errorMessage: Ref<string> = ref('')
     const polygons: Ref<Polygon[]> = ref([])
+
     const location: Ref<Location> = ref({} as Location)
+
     const observationErrors = reactive({
       name: '',
       birdId: '',
       locationId: '',
       geoPoint: '',
     })
+
     const observationInput = reactive({
       name: '',
       description: '',
@@ -195,6 +203,7 @@ export default {
       },
       active: true,
     })
+
     const { result, loading, error } = useQuery(OBSERVATION_INSERT_DATA)
     const { mutate: addObservation } = useMutation(ADD_OBSERVATION, () => ({
       variables: {
@@ -206,16 +215,21 @@ export default {
         cache.writeQuery({ query: OBSERVATIONS, data })
       },
     }))
+
     const handleLocationChange = () => {
       if (!location.value) return
+
       polygons.value = [location.value.area]
       observationInput.locationId = location.value.id
     }
+
     const handleCoordinateSelection = (event: LngLat) => {
       observationInput.geoPoint.coordinates = [event.lat, event.lng]
     }
+
     const isFormInvalid = (): boolean => {
       let hasSomeErrors = false
+
       if (observationInput.name === '') {
         observationErrors.name = 'Name is required'
         hasSomeErrors = true
@@ -243,18 +257,24 @@ export default {
       } else {
         observationErrors.geoPoint = ''
       }
+
       if (hasSomeErrors) return true
       return false
     }
+
     const submitForm = async () => {
       if (isFormInvalid()) return
+
       const observation = await addObservation().catch((err) => {
         errorMessage.value = err.message
       })
+
       push('/observations')
     }
+
     // Clean error when input changes
     watch(observationInput, () => isFormInvalid())
+
     return {
       observationInput,
       observationErrors,
@@ -264,6 +284,7 @@ export default {
       errorMessage,
       polygons,
       location,
+
       handleLocationChange,
       handleCoordinateSelection,
       submitForm,

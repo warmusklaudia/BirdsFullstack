@@ -2,14 +2,14 @@ import { ref, Ref, watch } from 'vue'
 import { provideApolloClient, useLazyQuery } from '@vue/apollo-composable'
 
 import { User } from '../interfaces/interface.user'
-import useApollo from './useApollo'
+import useGraphQL from './useApollo'
 import { GET_USER_BY_UID } from '../graphql/query.user'
 
 const user: Ref<User | null> = ref(null)
 
 export default () => {
   const setCustomUser = (u: User) => (user.value = u)
-  const { apolloClient } = useApollo()
+  const { apolloClient } = useGraphQL()
 
   provideApolloClient(apolloClient)
   const { result, load, document } = useLazyQuery(GET_USER_BY_UID)

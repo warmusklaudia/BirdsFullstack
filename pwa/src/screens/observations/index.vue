@@ -15,16 +15,20 @@
 
 <script lang="ts">
 import { useQuery } from '@vue/apollo-composable'
+
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import ObservationsTable from '../../components/observation/ObservationsTable.vue'
 import { OBSERVATIONS } from '../../graphql/query.observations'
+
 export default {
   components: {
     RouteHolder,
     ObservationsTable,
   },
+
   setup() {
     const { result, loading, error } = useQuery(OBSERVATIONS)
+
     return {
       result,
       loading,
