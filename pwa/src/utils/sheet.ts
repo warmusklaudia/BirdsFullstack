@@ -1,3 +1,4 @@
+//@ts-nocheck
 import fs, { promises as fsPromises } from 'fs'
 import process from 'process'
 import path from 'path'
