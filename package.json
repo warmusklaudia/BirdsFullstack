@@ -4,7 +4,10 @@
   "description": "",
   "scripts": {
     "dev": "start npm run dev -w pwa && npm run start:dev -w api",
-    "pwa": "npm run pwa -w pwa"
+    "pwa": "npm run pwa -w pwa",
+    "test:front": "npm run test:e2e -w pwa",
+    "test:back": "npm run test -w api",
+    "test": "run-p test:front test:back"
   },
   "repository": {
     "type": "git",
@@ -20,5 +23,8 @@
   "workspaces": [
     "pwa",
     "api"
-  ]
+  ],
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }
