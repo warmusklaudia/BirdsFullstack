@@ -28,8 +28,7 @@
         <div class="mx-auto max-w-6xl">
           <h2 class="font-theme text-2xl font-normal tracking-wide">Observations</h2>
           <p>
-            This bird has been spotted
-            {{ result.bird.observations }} time{{ result.bird.observations === 1 ? '' : 's' }}.
+            {{ $tc('birds.description.spotted', result.bird.observations) }}
           </p>
         </div>
       </div>
